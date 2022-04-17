@@ -23,6 +23,7 @@ long init_buffer_421(void);
 long enqueue_buffer_421(char *data);
 long dequeue_buffer_421(char *data);
 long delete_buffer_421(void);
+long print_buffer_421(void); //delete this when done
 
 #ifdef __cplusplus
 }
