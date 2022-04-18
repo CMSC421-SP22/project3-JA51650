@@ -1,36 +1,140 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <semaphore.h>
 #include "buffer_sem.h"
 
 static bb_buffer_421_t buffer;
+struct bb_node_421* head = NULL;
+struct bb_node_421* pointer = NULL;
 static sem_t mutex;
 static sem_t fill_count;
 static sem_t empty_count;
 
+//TODO WARNING: Using the status of head to check if buffer is empty may lead to shenanigans if head is dequeued
+
+int insert_initbuffer_421() { //helper function for init_buffer_421
+//TODO WARNING: Does this a critical section? if so, may require rewriting
+//	if buffer is uninitialized return -1: this should not be reached
+	if (head == NULL) {
+		fprintf(stderr, "Error: Somehow, buffer is uninitialized during init_buffer_421's helper function.\n");
+		return -1;
+	}
+
+	pointer = malloc(sizeof(struct bb_node_421));
+	pointer->next = buffer.write->next;
+
+	buffer.write->next = pointer;
+	buffer.write = buffer.write->next;
+	return 0;
+}
+
 long init_buffer_421(void) {
-	// Write your code to initialize buffer
+
+	//	if buffer already initialized return -1
+	if (head != NULL) {
+		fprintf(stderr, "Error: Attempting to initalize an already initialized buffer.\n");
+		return -1;
+	}
+
+	//	fprintf(stdout, "init_buffer_421 called\n");
+	//printf("value of uninit buffer data = %d\n", buffer.write->data);
+
+//	buffer = malloc(DATA_LENGTH * SIZE_OF_BUFFER);
+
+	head = malloc(sizeof(struct bb_node_421));
+	head->next = head;
+
+	buffer.write = head;
+	buffer.read = head;
+	buffer.length = 0;
+
+	// 	let insert_buffer_init_421(int i) handle insertion after head is inserted
+	for (int i = 1; i < SIZE_OF_BUFFER; i++) {
+		insert_initbuffer_421();
+		//		print_buffer_421(); //debug print statement
+	}
+
+	//	link final node->next to head, completing the circle
+	buffer.write->next = head;
+
+	//	after insertion, set write->next to head
+	buffer.write = head;
+
+	//	fprintf(stdout, "write is at node %d\n", buffer->write->data);
 
 	// Initialize your semaphores here.
-	
+	sem_init(&mutex, 0, 1);
+	sem_init(&fill_count, 0, SIZE_OF_BUFFER);
+	sem_init(&empty_count, 0, SIZE_OF_BUFFER);
 	return 0;
 }
 
 
 long enqueue_buffer_421(char * data) {
-	// Write your code to enqueue data into the buffer
+	//	if buffer is uninitialized cannot insert, fails
+	if (head == NULL) {
+		printf("Error: Attempting to enqueue into an uninitialized buffer.\n");
+		return -1;
+	}
+	if (buffer.length == SIZE_OF_BUFFER) {//not sure if this is correct- attempting to implement error upon full buffer
+		printf("Error: Attempting to enqueue into a full buffer.\n");
+		return -1;
+	}
+
+	sem_wait(&mutex); //global variables buffer.length, buffer.write protected
+	strcpy(buffer.write->data, data);
+	//printf("Data copied: %s\n", buffer.write->data);
+	buffer.write = buffer.write->next;
+	buffer.length++;
+	sem_post(&mutex);
+
+	return 0;
 }
 
 long dequeue_buffer_421(char * data) {
+	if (head == NULL) {
+		printf("Error: Attempting to dequeue into an uninitialized buffer.\n");
+		return -1;
+	}
+	if (buffer.length == 0) {
+		printf("Error: Attempting to dequeue into an empty buffer.\n");
+		return -1;
+	}
 
-	// Write your code to dequeue data from the buffer
-
+	sem_wait(&mutex); //global variables buffer.read, buffer.length protected
+	strcpy(data, buffer.read->data);
+	pointer = buffer.read->next;
+	strcpy(buffer.read->data, "");
+	buffer.read->next = pointer;
+	buffer.read = buffer.read->next;
+	buffer.length--;
+	sem_post(&mutex);
 	return 0;
 }
 
 
 long delete_buffer_421(void) {
-	// Tip: Don't call this while any process is waiting to enqueue or dequeue.
-	// write your code to delete buffer and other unwanted components
+	//	if buffer is uninitialized / already deleted, fails.
+	if (head == NULL) {
+		fprintf(stderr, "Error: Attempting to delete an uninitialized buffer.\n");
+		return -1;
+	}
+
+	buffer.write = head;
+
+	for (int i = 0; i < SIZE_OF_BUFFER; i++) {
+	//	fprintf(stdout, "Attempting to free node [%d, %s]\n", i+1, buffer.write->data);
+		pointer = buffer.write->next;
+		free(buffer.write);
+		buffer.write = pointer;
+		buffer.length--;
+	}
+
+	sem_destroy(&mutex);
+	sem_destroy(&fill_count);
+	sem_destroy(&empty_count);
+	head = NULL; //assign null in case any functions requiring initialized buffer are used again
 	return 0;
 }
 
