@@ -70,12 +70,14 @@ long enqueue_buffer_421(char * data) {
 		return -1;
 	}
 
+	sem_wait(&fill_count);
 	sem_wait(&mutex); //global variables buffer.length, buffer.write protected
 	memcpy(buffer.write->data, data, DATA_LENGTH);
 	//printf("Data copied: %s\n", buffer.write->data);
 	buffer.write = buffer.write->next;
 	buffer.length++;
 	sem_post(&mutex);
+	sem_post(&fill_count);
 
 	return 0;
 }
@@ -90,6 +92,7 @@ long dequeue_buffer_421(char * data) {
 		return -1;
 	}
 
+	sem_wait(&empty_count);
 	sem_wait(&mutex); //global variables buffer.read, buffer.length protected
 	memcpy(data, buffer.read->data, DATA_LENGTH);
 	pointer = buffer.read->next;
@@ -98,6 +101,8 @@ long dequeue_buffer_421(char * data) {
 	buffer.read = buffer.read->next;
 	buffer.length--;
 	sem_post(&mutex);
+	sem_post(&empty_count);
+
 	return 0;
 }
 

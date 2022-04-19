@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/wait.h>
 #include <semaphore.h>
 #include <pthread.h>
 //#include <linux/semaphore.h>
@@ -18,6 +19,7 @@ int main() {
 	init_buffer_421();
 
 	for(int i = 0; i < 1000; i++) {
+		printf("\tRun %d\n", i+1);
 		input = malloc(DATA_LENGTH);
 		output = malloc(DATA_LENGTH);
 
@@ -46,6 +48,12 @@ void *producer( void *ptr )
 {
 	char* input;
 	input = (char *) ptr;
+
+	float stime = 0.0010*(rand()%11);
+	printf("Producer wait for %f s...\n", stime);
+//	wait((int *)1000);
+	sleep(stime);
+
 	long i = enqueue_buffer_421(input);
 	if (i < 0) {
 		printf("Producer unsuccessful\n");
@@ -60,6 +68,12 @@ void *consumer( void *ptr )
 {
 	char* output;
 	output = (char *) ptr;
+
+	float stime = 0.0010*(rand()%11);
+	printf("Consumer wait for %f s...\n", stime);
+//	wait((int *)1000);
+	sleep(stime);
+
 	long i = dequeue_buffer_421(output);
 	if (i < 0) {
 		printf("Consumer unsuccessful\n");
