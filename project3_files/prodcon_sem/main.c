@@ -2,10 +2,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <semaphore.h>
+#include <pthread.h>
 //#include <linux/semaphore.h>
 
 int main() {
 
+	pthread_t thread1, thread2;
+	char* m1  = "Thread 1";
+	char* m2 = "Thread 2";
+	int p1, p2;
 	char* hello = malloc(1024);
 
 	enqueue_buffer_421("hi!");
