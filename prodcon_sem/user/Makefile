@@ -1,5 +1,5 @@
-SRCS = buffer_user.c main.c buffer_sem.h
-BIN = test
+SRCS = buffer_user_sem.c test_user_sem.c buffer_sem.h
+BIN = utest
 CFLAGS = -g -Wall -Wextra -pedantic -std=gnu11
 LDFLAGS = -g -pthread
 

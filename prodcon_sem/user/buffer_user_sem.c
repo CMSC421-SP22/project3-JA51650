@@ -65,17 +65,15 @@ long enqueue_buffer_421(char * data) {
 		printf("Error: Attempting to enqueue into an uninitialized buffer.\n");
 		return -1;
 	}
-	if (buffer.length == SIZE_OF_BUFFER) {//not sure if this is correct- attempting to implement error upon full buffer
-		printf("Error: Attempting to enqueue into a full buffer.\n");
-		return -1;
-	}
 
 	sem_wait(&fill_count);
 	sem_wait(&mutex); //global variables buffer.length, buffer.write protected
+
 	memcpy(buffer.write->data, data, DATA_LENGTH);
 	//printf("Data copied: %s\n", buffer.write->data);
 	buffer.write = buffer.write->next;
 	buffer.length++;
+
 	sem_post(&mutex);
 	sem_post(&fill_count);
 
@@ -87,16 +85,12 @@ long dequeue_buffer_421(char * data) {
 		printf("Error: Attempting to dequeue into an uninitialized buffer.\n");
 		return -1;
 	}
-	if (buffer.length == 0) {
-		printf("Error: Attempting to dequeue into an empty buffer.\n");
-		return -1;
-	}
 
 	sem_wait(&empty_count);
 	sem_wait(&mutex); //global variables buffer.read, buffer.length protected
 	memcpy(data, buffer.read->data, DATA_LENGTH);
 	pointer = buffer.read->next;
-	strcpy(buffer.read->data, "");
+	memcpy(buffer.read->data, "", DATA_LENGTH);
 	buffer.read->next = pointer;
 	buffer.read = buffer.read->next;
 	buffer.length--;

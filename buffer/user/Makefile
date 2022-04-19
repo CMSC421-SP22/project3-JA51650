@@ -1,5 +1,5 @@
-SRCS = buffer_mon.c main.c
-BIN = test
+SRCS = buffer_user.c test_user.c
+BIN = utest
 CFLAGS = -g -Wall -Wextra -pedantic -std=gnu11
 LDFLAGS = -g
 

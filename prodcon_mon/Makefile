@@ -1,7 +1,7 @@
-SRCS = buffer.c main.c
+SRCS = buffer_mon.c test_mon.c
 BIN = test
 CFLAGS = -g -Wall -Wextra -pedantic -std=gnu11
-LDFLAGS = -g
+LDFLAGS = -g -pthread
 
 OBJS = $(SRCS:.c=.o)
 

@@ -1,3 +1,7 @@
+//user implementation of buffer.
+//make
+//./utest
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "buffer.h"

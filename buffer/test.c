@@ -1,3 +1,7 @@
+//Kernel version of buffer.
+//	gcc test.c -o ktest
+//	./ktest
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -45,9 +49,9 @@ int main (int argc, char *argv[]) {
 	srand(time(0));
 	do {
 		printMenu();
-		printf("Enter a number: ");
+		printf("Enter an input (test will break if multiple chars are entered): ");
 		input = getchar();
-		getchar(); //consumes \n
+		getchar();
 
 		if (input == '1') {
 			rv = init_buffer_421_syscall();
@@ -63,12 +67,12 @@ int main (int argc, char *argv[]) {
 		else if (input == '4') {
 			rv = delete_buffer_421_syscall();
 		}
-		else if (input != '0'){
-			printf("Invalid input: %c\n", input);
+		else if (input == '0'){
+			printf("Exiting...\n");
 			rv = -2;
 		}
 		else {
-			printf("Exiting...\n");
+			printf("Invalid input: %c\n", input);
 			rv = -2;
 		}
 		if (rv == -1) {
