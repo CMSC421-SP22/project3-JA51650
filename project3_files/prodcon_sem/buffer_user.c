@@ -11,23 +11,7 @@ static sem_t mutex;
 static sem_t fill_count;
 static sem_t empty_count;
 
-//TODO WARNING: Using the status of head to check if buffer is empty may lead to shenanigans if head is dequeued
-
-int insert_initbuffer_421() { //helper function for init_buffer_421
-//TODO WARNING: Does this a critical section? if so, may require rewriting
-//	if buffer is uninitialized return -1: this should not be reached
-	if (head == NULL) {
-		fprintf(stderr, "Error: Somehow, buffer is uninitialized during init_buffer_421's helper function.\n");
-		return -1;
-	}
-
-	pointer = malloc(sizeof(struct bb_node_421));
-	pointer->next = buffer.write->next;
-
-	buffer.write->next = pointer;
-	buffer.write = buffer.write->next;
-	return 0;
-}
+//TODO WARNING: Using the status of head to check if buffer is empty may lead to shenanigans
 
 long init_buffer_421(void) {
 
@@ -51,7 +35,11 @@ long init_buffer_421(void) {
 
 	// 	let insert_buffer_init_421(int i) handle insertion after head is inserted
 	for (int i = 1; i < SIZE_OF_BUFFER; i++) {
-		insert_initbuffer_421();
+		pointer = malloc(sizeof(struct bb_node_421));
+		pointer->next = buffer.write->next;
+
+		buffer.write->next = pointer;
+		buffer.write = buffer.write->next;
 		//		print_buffer_421(); //debug print statement
 	}
 
@@ -83,7 +71,7 @@ long enqueue_buffer_421(char * data) {
 	}
 
 	sem_wait(&mutex); //global variables buffer.length, buffer.write protected
-	strcpy(buffer.write->data, data);
+	memcpy(buffer.write->data, data, DATA_LENGTH);
 	//printf("Data copied: %s\n", buffer.write->data);
 	buffer.write = buffer.write->next;
 	buffer.length++;
@@ -103,7 +91,7 @@ long dequeue_buffer_421(char * data) {
 	}
 
 	sem_wait(&mutex); //global variables buffer.read, buffer.length protected
-	strcpy(data, buffer.read->data);
+	memcpy(data, buffer.read->data, DATA_LENGTH);
 	pointer = buffer.read->next;
 	strcpy(buffer.read->data, "");
 	buffer.read->next = pointer;
