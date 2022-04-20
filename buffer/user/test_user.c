@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include "buffer.h"
 int main() {
 	fprintf(stdout, "==TEST START==\n");
@@ -12,7 +11,13 @@ int main() {
 	init_buffer_421();
 	init_buffer_421();
 
+	for (int i = 1; i < 40; i++){
+		insert_buffer_421(i);
+	}
+	delete_buffer_421();
+
 	fprintf(stdout, "==END OF ERROR TEST==\n\n==NORMAL TEST==\n");
+	init_buffer_421();
 	print_buffer_421();
 	delete_buffer_421();
 
@@ -22,40 +27,9 @@ int main() {
 	}
 	print_buffer_421();
 
-	for (int i = 21; i < 31; i++) {
-		insert_buffer_421(i);
-	}
-	print_buffer_421();
-
 	delete_buffer_421();
 
-	fprintf(stdout, "==END OF NORMAL TEST==\n\n==STRESS TEST==\n");
-
-	time_t t;
-	srand((unsigned) time(&t));
-
-	init_buffer_421();
-	for (int i = 0; i < 100; i++) {
-		insert_buffer_421(rand()%1000);
-	}
-	print_buffer_421();
-	delete_buffer_421();
-
-	init_buffer_421();
-	for (int i = 0; i < 1000; i++) {
-		insert_buffer_421(rand()%1000);
-	}
-	print_buffer_421();
-	delete_buffer_421();
-
-	init_buffer_421();
-	for (int i = 0; i < 10000; i++) {
-		insert_buffer_421(rand()%1000);
-	}
-	print_buffer_421();
-	delete_buffer_421();
-
-	fprintf(stdout, "==END OF STRESS TEST==\n");
+	fprintf(stdout, "==END OF NORMAL TEST==\n");
 	fprintf(stdout, "\n==TEST END==\n");
 
 	return 0;

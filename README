@@ -16,3 +16,65 @@ several of them using the Restructured Text markup notation.
 Please read the Documentation/process/changes.rst file, as it contains the
 requirements for building and running the kernel, and information about
 the problems which may result by upgrading your kernel.
+
+https://stackoverflow.com/questions/13291353/iso-c90-forbids-mixed-declarations-and-code-in-c
+mixed declaration help
+
+https://unix.stackexchange.com/questions/613903/implementing-own-system-call-linux
+implementing syscall help
+
+https://www.geeksforgeeks.org/wait-system-call-c/ 
+wait system call
+
+https://www.poftut.com/what-is-sleep-function-and-how-to-use-it-in-c-program/ 
+sleep function
+
+https://en.cppreference.com/w/cpp/string/byte/memcpy 
+memcpy documentation
+
+https://man7.org/linux/man-pages/man3/sem_timedwait.3.html 
+POSIX semaphore wait documentation
+
+https://www.geeksforgeeks.org/use-posix-semaphores-c/ 
+POSIX semaphore help
+
+https://linuxhint.com/posix-semaphores-with-c-programming/ 
+POSIX semaphore documentation
+
+https://0xax.gitbooks.io/linux-insides/content/SyncPrim/linux-sync-3.html 
+kernel semaphore documentation
+
+https://stackoverflow.com/questions/42548278/critical-section-with-semaphores-in-c 
+semaphore critical section research
+
+https://stackoverflow.com/questions/43021506/correct-way-to-initialize-semaphore-in-linux-driver 
+kernel semaphore initialization help
+
+https://stackoverflow.com/questions/9766133/is-linux-release-the-spinlock-semaphore-when-it-kill-a-process 
+kernel semaphore can't be killed research
+
+https://www.kernel.org/doc/htmldocs/kernel-api/API---copy-to-user.html 
+copy_to_user documentation
+
+https://www.kernel.org/doc/htmldocs/kernel-api/API---copy-from-user.html 
+copy_from_user documentation
+
+https://www.cs.cmu.edu/afs/cs/academic/class/15492-f07/www/pthreads.html 
+pthread tutorial
+
+https://stackoverflow.com/questions/23400097/c-confused-on-how-to-initialize-and-implement-a-pthread-mutex-and-condition-vari
+pthread mutex and cond help
+
+https://stackoverflow.com/questions/15367617/creating-makefile-with-pthreads 
+pthread makefile help
+
+http://www.cs.kent.edu/~ruttan/sysprog/lectures/multi-thread/pthread_mutex_init.html 
+pthread mutex documentation
+
+http://www.cs.kent.edu/~ruttan/sysprog/lectures/multi-thread/pthread_cond_init.html 
+pthread cond documentation
+
+https://www.geeksforgeeks.org/rand-and-srand-in-ccpp/ 
+srand tutorial
+
+

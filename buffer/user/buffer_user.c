@@ -70,6 +70,10 @@ long insert_buffer_421(int i) {
 		fprintf(stderr, "Error: Attempting to insert into an uninitialized buffer.\n");
 		return -1;
 	}
+	if (buffer->length == SIZE_OF_BUFFER) {
+		fprintf(stderr, "Error: Attempting to insert into full buffer\n");
+		return -1;
+	}
 
 	buffer->write->data = i;
 	buffer->write = buffer->write->next;

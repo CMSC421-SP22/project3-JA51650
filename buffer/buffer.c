@@ -57,6 +57,11 @@ SYSCALL_DEFINE1(insert_buffer_421, int, i) {
 		return -1;
 	}
 
+	if(buffer->length == SIZE_OF_BUFFER) {
+		printk("Error: Attempting to insert into full buffer\n");
+		return -1;
+	}
+
 	buffer->write->data = i;
 	buffer->write = buffer->write->next;
 	buffer->length++;
